@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  mysql_db:
+    platform: linux/amd64
+    container_name: db
+    image: 'mysql:5.7'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/config:/etc/mysql/conf.d
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --lower_case_table_names=1
+    healthcheck:
+      test: mysqladmin ping -h localhost -u root --password=root
+      timeout: 10s
+      retries: 10

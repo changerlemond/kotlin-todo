@@ -6,9 +6,10 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 
+@Entity
+@Table(name = "todos")
 class Todo (
     @Id
-    @Tsid
     val id: Long,
 
     @OneToOne(fetch = FetchType.LAZY)
