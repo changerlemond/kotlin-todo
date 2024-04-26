@@ -30,11 +30,12 @@ class UserServiceTest @Autowired constructor(
     }
 
     @Test
-    @DisplayName("Failed to save user: Duplicate nickname found")
+    @DisplayName("Failed to save user: Duplicate nickname found.")
     fun saveUserWithDuplicateNickname() {
         val request = UserCreateRequest("test", "test")
         userService.saveUser(request)
-        assertThrows(IllegalArgumentException::class.java) { userService.saveUser(request) }
+        val exception = assertThrows(IllegalArgumentException::class.java) { userService.saveUser(request) }
+        assertThat(exception).hasMessageContaining("Nickname already exists.")
     }
 
     @Test

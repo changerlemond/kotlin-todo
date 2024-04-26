@@ -14,13 +14,10 @@ class UserService(private val userRepository: UserRepository) {
     fun saveUser(request: UserCreateRequest): UserResponse {
         val isExistNickname = userRepository.findByNickname(nickname = request.nickname)?.nickname
         if (isExistNickname != null) {
-            throw IllegalArgumentException("Nickname already exists")
+            throw IllegalArgumentException("Nickname already exists.")
         }
-
         val newUser = User(request.nickname, request.password)
-        userRepository.save(newUser)
-
-        return UserResponse.user(newUser)
+        return UserResponse.user(userRepository.save(newUser))
     }
 
     @Transactional
