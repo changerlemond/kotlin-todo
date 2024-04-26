@@ -11,13 +11,15 @@ services:
       - ./db/mysql/config:/etc/mysql/conf.d
       - ./db/mysql/init:/docker-entrypoint-initdb.d
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: todo
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --lower_case_table_names=1
     healthcheck:
-      test: mysqladmin ping -h localhost -u root --password=root
+      test: mysqladmin ping -h localhost -u ${MYSQL_USERNAME} --p=${MYSQL_PASSWORD}
       timeout: 10s
       retries: 10
