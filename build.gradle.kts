@@ -42,15 +42,13 @@ dependencies {
 	annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
 	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+	implementation("com.mysql:mysql-connector-j")
 
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
 	// Test
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	// TODO: 임시 사용, 추후 데이터베이스 변경
-	runtimeOnly("com.h2database:h2")
-	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -64,4 +62,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	testLogging {
+		events("passed", "skipped", "failed")
+	}
 }

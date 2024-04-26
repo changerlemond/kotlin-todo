@@ -1,10 +1,14 @@
 spring:
+  application:
+    name: todo
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/todo
+    url: jdbc:mysql://localhost:3306/todo?serverTimeZone=UTC&characterEncoding=UTF-8
     username: root
     password: root
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     properties:
