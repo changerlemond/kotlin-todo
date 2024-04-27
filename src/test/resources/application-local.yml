@@ -1,23 +1,23 @@
 spring:
   application:
     name: todo
+  config:
+    activate:
+      on-profile: "local"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/todo?serverTimeZone=UTC&characterEncoding=UTF-8
-    username: ${username}
-    password: ${password}
+    url: jdbc:h2:mem:todo;MODE=MySQL
+    username: sa
+    password:
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        show_sql: true
-    open-in-view: false
-    show-sql: true
-    generate-ddl: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
 logging:
   level:

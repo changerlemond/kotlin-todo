@@ -3,7 +3,8 @@ package server.project.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import server.project.domain.User
-import server.project.dto.user.request.UserCreateRequest
+import server.project.domain.UserRole
+import server.project.dto.user.request.UserRequest
 import server.project.dto.user.response.UserResponse
 import server.project.repository.UserRepository
 
@@ -11,12 +12,12 @@ import server.project.repository.UserRepository
 class UserService(private val userRepository: UserRepository) {
 
     @Transactional
-    fun saveUser(request: UserCreateRequest): UserResponse {
+    fun saveUser(request: UserRequest): UserResponse {
         val isExistNickname = userRepository.findByNickname(nickname = request.nickname)?.nickname
         if (isExistNickname != null) {
             throw IllegalArgumentException("Nickname already exists.")
         }
-        val newUser = User(request.nickname, request.password)
+        val newUser = User(request.nickname, request.password, mutableSetOf(UserRole.USER))
         return UserResponse.user(userRepository.save(newUser))
     }
 

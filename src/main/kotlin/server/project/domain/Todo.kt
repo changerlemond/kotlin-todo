@@ -1,15 +1,15 @@
 package server.project.domain
 
-import io.hypersistence.tsid.TSID
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "todos")
 class Todo (
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User,
 
@@ -17,7 +17,7 @@ class Todo (
     var text: String,
 ) {
     @Id
-    val id: Long = TSID.TSID_EPOCH
+    val id: Long = UUID.randomUUID().mostSignificantBits
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
