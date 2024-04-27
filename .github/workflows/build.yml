@@ -1,5 +1,5 @@
 env:
-  RESOURCE_PATH: src/main/resources/application.yml
+  RESOURCE_PATH: src/main/resources/application-local.yml
 
 name: Build Test
 permissions: write-all
