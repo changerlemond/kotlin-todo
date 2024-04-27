@@ -17,7 +17,7 @@ class Todo (
     var text: String,
 ) {
     @Id
-    val id: Long = UUID.randomUUID().mostSignificantBits
+    val id: Long = UUID.randomUUID().leastSignificantBits
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

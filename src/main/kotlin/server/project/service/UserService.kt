@@ -1,24 +1,55 @@
 package server.project.service
 
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import server.project.auth.JwtService
+import server.project.domain.QUser.user
 import server.project.domain.User
 import server.project.domain.UserRole
 import server.project.dto.user.request.UserRequest
-import server.project.dto.user.response.UserResponse
+import server.project.dto.user.response.RegisterResponse
 import server.project.repository.UserRepository
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository,
+                  private val jwtService: JwtService,
+                  private val passwordEncoder: PasswordEncoder,
+                  private val authenticationManager: AuthenticationManager) {
 
     @Transactional
-    fun saveUser(request: UserRequest): UserResponse {
+    fun register(request: UserRequest): RegisterResponse {
         val isExistNickname = userRepository.findByNickname(nickname = request.nickname)?.nickname
         if (isExistNickname != null) {
             throw IllegalArgumentException("Nickname already exists.")
         }
-        val newUser = User(request.nickname, request.password, mutableSetOf(UserRole.USER))
-        return UserResponse.user(userRepository.save(newUser))
+        val password = passwordEncoder.encode(request.password)
+        val newUser = User(request.nickname, password, mutableSetOf(UserRole.USER))
+        userRepository.save(newUser)
+        val token = jwtService.generateToken(newUser)
+        return RegisterResponse(newUser.id, newUser.nickname, token)
+    }
+
+    fun login(userRequest: UserRequest): RegisterResponse {
+        val user = userRepository.findByNickname(userRequest.nickname)
+
+        if (user != null) {
+            if (!passwordEncoder.matches(userRequest.password, user.password)) {
+                throw IllegalArgumentException("Invalid password.")
+            }
+
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    userRequest.nickname,
+                    userRequest.password
+                )
+            )
+            return RegisterResponse(id = user.id, user.nickname, token = jwtService.generateToken(user))
+        } else {
+            throw IllegalArgumentException("User not found.")
+        }
     }
 
     @Transactional

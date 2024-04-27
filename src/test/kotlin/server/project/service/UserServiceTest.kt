@@ -23,7 +23,7 @@ class UserServiceTest @Autowired constructor(
     @DisplayName("User save success.")
     fun saveUser() {
         val request = UserRequest("test", "test")
-        userService.saveUser(request)
+        userService.register(request)
         val result = userRepository.findAll()
         assertThat(result).hasSize(1)
         assertThat(result[0].nickname).isEqualTo(request.nickname)
@@ -33,8 +33,8 @@ class UserServiceTest @Autowired constructor(
     @DisplayName("Failed to save user: Duplicate nickname found.")
     fun saveUserWithDuplicateNickname() {
         val request = UserRequest("test", "test")
-        userService.saveUser(request)
-        val exception = assertThrows(IllegalArgumentException::class.java) { userService.saveUser(request) }
+        userService.register(request)
+        val exception = assertThrows(IllegalArgumentException::class.java) { userService.register(request) }
         assertThat(exception).hasMessageContaining("Nickname already exists.")
     }
 
@@ -42,7 +42,7 @@ class UserServiceTest @Autowired constructor(
     @DisplayName("User delete success.")
     fun deleteUser() {
         val request = UserRequest("test", "test")
-        val user = userService.saveUser(request)
+        val user = userService.register(request)
         userService.deleteUser(user.id)
         val userExists = userRepository.existsById(user.id)
         assertThat(userExists).isFalse()
