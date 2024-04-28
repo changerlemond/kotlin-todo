@@ -9,7 +9,7 @@ import java.util.UUID
 @Entity
 @Table(name = "todos")
 class Todo (
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User,
 

@@ -10,6 +10,7 @@ import server.project.domain.User
 import server.project.domain.UserRole
 import server.project.dto.user.request.UserRequest
 import server.project.dto.user.response.RegisterResponse
+import server.project.repository.TodoRepository
 import server.project.repository.UserRepository
 
 @Service
@@ -17,7 +18,8 @@ class UserService(
     private val userRepository: UserRepository,
     private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder,
-    private val authenticationManager: AuthenticationManager
+    private val authenticationManager: AuthenticationManager,
+    private val todoRepository: TodoRepository
 ) {
 
     @Transactional
@@ -60,6 +62,7 @@ class UserService(
 
     @Transactional
     fun deleteUser(id: Long) {
+        todoRepository.deleteAll()
         userRepository.deleteById(id)
     }
 
