@@ -60,3 +60,9 @@ Todo 서비스를 이용할 회원
 
 ### API
 http://localhost:8080/swagger-ui/index.html#/todo-controller/home
+
+### 환경변수
+https://drive.google.com/drive/folders/1V2KP4sQqmoFpNWkrNJWpYD_JcigXSLll?usp=drive_link
+
+### Docker
+docker-compose --env-file ./.env up
