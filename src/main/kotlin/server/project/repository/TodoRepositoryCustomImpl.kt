@@ -12,7 +12,7 @@ class TodoRepositoryCustomImpl(private val queryFactory: JPAQueryFactory): TodoR
     override fun findByUserId(userId: Long, pageable: Pageable): Page<Todo> {
         val content = queryFactory.selectFrom(todo)
             .where(todo.user.id.eq(userId))
-            .orderBy(todo.createTime.desc())
+            .orderBy(todo.createdDateTime.desc())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()
@@ -27,7 +27,7 @@ class TodoRepositoryCustomImpl(private val queryFactory: JPAQueryFactory): TodoR
         return queryFactory.select(todo)
             .from(todo)
             .where(todo.user.id.eq(userId))
-            .orderBy(todo.createTime.desc())
+            .orderBy(todo.createdDateTime.desc())
             .limit(1)
             .fetchOne()
     }

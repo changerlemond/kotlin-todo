@@ -8,6 +8,6 @@ class TodoResponse(todo: Todo) {
     val userNickName = todo.user.nickname
     val text = todo.text
     val status = todo.status
-    val createTime = todo.createTime
-    val updateTime = todo.updateTime
+    val createDateTime = todo.createdDateTime
+    val updateDateTime = todo.updatedDateTime
 }

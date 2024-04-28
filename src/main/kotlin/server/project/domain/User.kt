@@ -27,7 +27,7 @@ class User(
 
     @CreationTimestamp
     @Column(nullable = false, name = "created_at")
-    var createTime: LocalDateTime = LocalDateTime.now()
+    var createdDateTime: LocalDateTime = LocalDateTime.now()
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return this.roles.map { SimpleGrantedAuthority(it.name) }.toMutableList()
     }

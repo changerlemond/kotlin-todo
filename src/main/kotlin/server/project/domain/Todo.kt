@@ -9,7 +9,7 @@ import java.util.UUID
 @Entity
 @Table(name = "todos")
 class Todo (
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
     @JoinColumn(name = "user_id")
     val user: User,
 
@@ -25,9 +25,9 @@ class Todo (
 
     @CreationTimestamp
     @Column(nullable = false, name = "created_at")
-    var createTime: LocalDateTime = LocalDateTime.now()
+    var createdDateTime: LocalDateTime = LocalDateTime.now()
 
     @UpdateTimestamp
     @Column(nullable = false, name = "updated_at")
-    var updateTime: LocalDateTime = LocalDateTime.now()
+    var updatedDateTime: LocalDateTime = LocalDateTime.now()
 }
