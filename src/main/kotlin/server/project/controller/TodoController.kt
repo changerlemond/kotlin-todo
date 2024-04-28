@@ -14,7 +14,6 @@ import server.project.service.TodoService
 @RestController
 class TodoController(private val todoService: TodoService) {
 
-    // TODO: 테스트를 위한 컨트롤러, 추후 제거
     @GetMapping("/")
     fun home(): String {
         return "Hello World!"
@@ -26,6 +25,7 @@ class TodoController(private val todoService: TodoService) {
         return todoService.getTodoById(id)
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/todo/list")
     fun getTodosByUser(
         @AuthenticationPrincipal user: User,
@@ -34,11 +34,13 @@ class TodoController(private val todoService: TodoService) {
         return todoService.getTodosByUser(user.id, pageable)
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/todo/latest")
     fun getByTodoByLatest(@AuthenticationPrincipal user: User): Todo? {
         return todoService.getLatestTodoByUser(user.id)
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/todo/create")
     fun saveTodo(@RequestBody request: TodoCreateRequest): Todo {
         return todoService.saveTodo(request)

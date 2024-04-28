@@ -1,5 +1,6 @@
 package server.project.controller
 
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import server.project.dto.user.request.UserRequest
 import server.project.dto.user.response.RegisterResponse
@@ -18,6 +19,7 @@ class UserController(private val userService: UserService) {
         return userService.login(request)
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/user/{id}")
     fun deleteUser(@PathVariable id: Long) {
         userService.deleteUser(id)

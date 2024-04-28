@@ -29,7 +29,17 @@ class SecurityConfig(
         .csrf { it.disable() }
         .authorizeHttpRequests {
             it
-                .requestMatchers("/", "login", "register").permitAll()
+                .requestMatchers(
+                    "/",
+                    "login",
+                    "register",
+                    "/swagger",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/api-docs",
+                    "/api-docs/**",
+                    "/v3/api-docs/**")
+                .permitAll()
                 .anyRequest().authenticated()
         }
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
