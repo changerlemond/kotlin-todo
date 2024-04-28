@@ -1,4 +1,4 @@
-package server.project.dto.todo
+package server.project.dto.todo.response
 
 import server.project.domain.Todo
 

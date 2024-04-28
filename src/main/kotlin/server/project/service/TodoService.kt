@@ -5,7 +5,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import server.project.domain.Todo
-import server.project.dto.todo.TodoResponse
+import server.project.domain.TodoStatus
+import server.project.dto.todo.request.UpdateTodoRequest
+import server.project.dto.todo.response.TodoResponse
 import server.project.dto.user.request.TodoCreateRequest
 import server.project.repository.TodoRepository
 import server.project.repository.UserRepository
@@ -45,6 +47,20 @@ class TodoService(
         }
         val newTodo = Todo(user.get(), request.text)
         return TodoResponse(todoRepository.save(newTodo))
+    }
+
+    @Transactional
+    fun updateTodoStatus(userId: Long, request: UpdateTodoRequest): TodoResponse {
+        val todo = todoRepository.findById(request.id).get()
+        if (todo.user.id != userId) {
+            throw IllegalStateException("Only todo create user update status.")
+        }
+        if (todo.status != TodoStatus.IN_PROGRESS && request.status == TodoStatus.HOLD) {
+            throw IllegalStateException("Todo status not changed.")
+        }
+        todo.status = request.status
+        todoRepository.save(todo)
+        return TodoResponse(todo)
     }
 
 }

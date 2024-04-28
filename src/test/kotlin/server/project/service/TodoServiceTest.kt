@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import server.project.domain.Todo
+import server.project.domain.TodoStatus
 import server.project.domain.User
 import server.project.domain.UserRole
+import server.project.dto.todo.request.UpdateTodoRequest
 import server.project.dto.user.request.TodoCreateRequest
 import server.project.repository.TodoRepository
 import server.project.repository.UserRepository
@@ -111,4 +113,24 @@ class TodoServiceTest @Autowired constructor(
         assertThat(result.content[0].id).isEqualTo(todo.id)
     }
 
+    @Test
+    @DisplayName("Todo update success.")
+    fun updateTodoStatus() {
+        val user = userRepository.save(User("test", "test", mutableSetOf(UserRole.USER)))
+        val todo = todoRepository.save(Todo(user, "test"))
+        val request = UpdateTodoRequest(todo.id, TodoStatus.DONE)
+        todoService.updateTodoStatus(user.id, request)
+        val result = todoRepository.findById(todo.id).get()
+        assertThat(result.status).isEqualTo(request.status)
+    }
+
+    @Test
+    @DisplayName("Failed to update todo: Only 'IN_PROGRESS' status can be updated to 'HOLD.")
+    fun updateTodoStatusFailed_1() {
+        val user = userRepository.save(User("test", "test", mutableSetOf(UserRole.USER)))
+        val todo = todoRepository.save(Todo(user, "test"))
+        val request = UpdateTodoRequest(todo.id, TodoStatus.HOLD)
+        val exception = assertThrows(IllegalStateException::class.java) {todoService.updateTodoStatus(user.id, request) }
+        assertEquals("Todo status not changed.", exception.message)
+    }
 }

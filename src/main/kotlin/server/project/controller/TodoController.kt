@@ -7,7 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import server.project.domain.User
-import server.project.dto.todo.TodoResponse
+import server.project.dto.todo.request.UpdateTodoRequest
+import server.project.dto.todo.response.TodoResponse
 import server.project.dto.user.request.TodoCreateRequest
 import server.project.service.TodoService
 
@@ -44,6 +45,12 @@ class TodoController(private val todoService: TodoService) {
     @PostMapping("/todo/create")
     fun saveTodo(@RequestBody request: TodoCreateRequest): TodoResponse {
         return todoService.saveTodo(request)
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/todo/update")
+    fun updateTodoStatus(@RequestBody request: UpdateTodoRequest, @AuthenticationPrincipal user: User): TodoResponse {
+        return todoService.updateTodoStatus(user.id, request)
     }
 
 }
