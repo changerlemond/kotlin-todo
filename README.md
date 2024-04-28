@@ -1,6 +1,6 @@
 ## Todo Project
 
-<U>*updated 2024.04.24*</U>
+<U>*updated 2024.04.28*</U>
 
 ---
 
@@ -8,7 +8,7 @@
 - Java 17
 - Gradle 3.0.17
 - Spring 3.2.5
-- MySQL
+- MySQL 8.0
 
 ---
 
@@ -45,6 +45,7 @@ Todo 서비스를 이용할 회원
 | id          | bigint       | 유저 id    | primary_key |
 | nickname    | varchar(255) | 닉네임      |             |
 | password    | varchar(255) | 비밀번호     |             |
+| role        | varchar(255) | 유저 역할    |             |
 | create_time | datetime     | 유저 가입 시간 |             |
 
 **Todo**
@@ -54,6 +55,7 @@ Todo 서비스를 이용할 회원
 | id          | bigint   | todo id  | primary_key |
 | user_id     | bigint   | 유저 id    | foreign_key |
 | text        | longtext | 할일 내용    |             |
+| status      | varchar(255) | 할일 상태    |             |
 | create_time | datetime | 할일 생성 시간 |             |
 | update_time | datetime | 할일 변경 시간 |             |
 ---
