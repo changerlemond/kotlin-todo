@@ -37,7 +37,7 @@ class TodoServiceTest @Autowired constructor(
         val result = todoService.getTodoById(todo.id)
         assertThat(result.text).isEqualTo(todo.text)
         assertThat(result.id).isEqualTo(todo.id)
-        assertThat(result.user.id).isEqualTo(user.id)
+        assertThat(result.userId).isEqualTo(user.id)
     }
 
     @Test
@@ -79,7 +79,7 @@ class TodoServiceTest @Autowired constructor(
         val todo = todoRepository.save(Todo(user, "test2"))
         val result = todoService.getTodoById(todo.id)
         assertThat(result).isNotNull
-        assertThat(result.user.id).isEqualTo(todo.user.id)
+        assertThat(result.userId).isEqualTo(todo.user.id)
         assertThat(result.text).isEqualTo(todo.text)
     }
 
