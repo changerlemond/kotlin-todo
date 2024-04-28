@@ -3,7 +3,6 @@ package server.project.controller
 import org.springframework.web.bind.annotation.*
 import server.project.dto.user.request.UserRequest
 import server.project.dto.user.response.RegisterResponse
-import server.project.dto.user.response.UserResponse
 import server.project.service.UserService
 
 @RestController

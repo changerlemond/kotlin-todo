@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import server.project.auth.JwtService
-import server.project.domain.QUser.user
 import server.project.domain.User
 import server.project.domain.UserRole
 import server.project.dto.user.request.UserRequest
@@ -14,10 +13,12 @@ import server.project.dto.user.response.RegisterResponse
 import server.project.repository.UserRepository
 
 @Service
-class UserService(private val userRepository: UserRepository,
-                  private val jwtService: JwtService,
-                  private val passwordEncoder: PasswordEncoder,
-                  private val authenticationManager: AuthenticationManager) {
+class UserService(
+    private val userRepository: UserRepository,
+    private val jwtService: JwtService,
+    private val passwordEncoder: PasswordEncoder,
+    private val authenticationManager: AuthenticationManager
+) {
 
     @Transactional
     fun register(request: UserRequest): RegisterResponse {
@@ -29,6 +30,12 @@ class UserService(private val userRepository: UserRepository,
         val newUser = User(request.nickname, password, mutableSetOf(UserRole.USER))
         userRepository.save(newUser)
         val token = jwtService.generateToken(newUser)
+        authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(
+                request.nickname,
+                request.password
+            )
+        )
         return RegisterResponse(newUser.id, newUser.nickname, token)
     }
 
@@ -39,7 +46,6 @@ class UserService(private val userRepository: UserRepository,
             if (!passwordEncoder.matches(userRequest.password, user.password)) {
                 throw IllegalArgumentException("Invalid password.")
             }
-
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                     userRequest.nickname,
