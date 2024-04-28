@@ -1,7 +1,9 @@
 package server.project.controller
 
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import server.project.domain.User
 import server.project.dto.user.request.UserRequest
 import server.project.dto.user.response.RegisterResponse
 import server.project.service.UserService
@@ -20,9 +22,9 @@ class UserController(private val userService: UserService) {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("/user/{id}")
-    fun deleteUser(@PathVariable id: Long) {
-        userService.deleteUser(id)
+    @DeleteMapping("/user/leave")
+    fun deleteUser(@AuthenticationPrincipal user: User) {
+        userService.deleteUser(user.id)
     }
 
 }
